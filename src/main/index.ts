@@ -1,71 +1,61 @@
-import { app, shell, BrowserWindow } from 'electron'
-import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+import { app, BrowserWindow, nativeImage, nativeTheme, shell } from 'electron'
+import { join } from 'node:path'
+import { is, optimizer } from '@electron-toolkit/utils'
+import devIcon from '../../build/icon.png?asset'
+import { registerIpc } from './ipc'
+import { handleClipProtocol, registerClipScheme } from './services/protocol'
+import { getTheme } from './services/settings'
+import { windowBackground } from './services/theme'
 
-function createWindow(): void {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+registerClipScheme()
+app.setName('Clipfora')
+
+function createWindow(): BrowserWindow {
+  const win = new BrowserWindow({
+    width: 1440,
+    height: 900,
+    minWidth: 1100,
+    minHeight: 700,
     show: false,
-    autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
+    title: 'Clipfora',
+    backgroundColor: windowBackground(),
+    titleBarStyle: 'hiddenInset',
+    trafficLightPosition: { x: 16, y: 18 },
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: true,
+      contextIsolation: true
     }
   })
-
-  mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
-  })
-
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
+  win.on('ready-to-show', () => win.show())
+  // links open in the browser (https only); the window itself never navigates away from the app
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    if (/^https:\/\//i.test(url)) shell.openExternal(url)
     return { action: 'deny' }
   })
-
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
-  } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
-  }
+  win.webContents.on('will-navigate', (e, url) => {
+    if (url !== win.webContents.getURL()) e.preventDefault()
+  })
+  if (is.dev && process.env['ELECTRON_RENDERER_URL'])
+    win.loadURL(process.env['ELECTRON_RENDERER_URL'])
+  else win.loadFile(join(__dirname, '../renderer/index.html'))
+  return win
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
-
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
-  app.on('browser-window-created', (_, window) => {
-    optimizer.watchWindowShortcuts(window)
-  })
-
-  createWindow()
-
-  app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  app.on('browser-window-created', (_, w) => optimizer.watchWindowShortcuts(w))
+  // apply the saved theme before the window exists, so the first frame is already right
+  nativeTheme.themeSource = getTheme()
+  handleClipProtocol()
+  // `npm run dev` runs inside Electron's own bundle, which would show Electron's icon in the Dock
+  if (!app.isPackaged) app.dock?.setIcon(nativeImage.createFromPath(devIcon))
+  let win: BrowserWindow | null = createWindow()
+  registerIpc(() => win) // once: handlers always talk to the current window
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) win = createWindow()
   })
 })
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  if (process.platform !== 'darwin') app.quit()
 })
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
