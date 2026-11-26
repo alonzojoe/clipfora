@@ -1,6 +1,14 @@
 {
   "version": 2,
   "skills": {
+    "clips": {
+      "source": "Melvynx/video-agent-skills",
+      "commit": "f4542923f7f796a1fa0e544cbfc1109d5eec87d8",
+      "sourceType": "github",
+      "skillPath": "skills/clips/SKILL.md",
+      "computedHash": "c273c3fe5673b9ece70490449d87160c63bf76c72274fa173a9b7c3a06bcd9d3",
+      "installMode": "copy"
+    },
     "ffmpeg": {
       "source": "digitalsamba/claude-code-video-toolkit",
       "commit": "95ede9ef6cc9695814290c09b7d7300295b5f28a",
@@ -215,6 +223,14 @@
       "sourceType": "github",
       "skillPath": "skills/reverse-any-video/SKILL.md",
       "computedHash": "221f106c2b350432e566d8469f91c914978a868becd7fffe72f312ae105d1297",
+      "installMode": "copy"
+    },
+    "short-editing": {
+      "source": "Melvynx/video-agent-skills",
+      "commit": "f4542923f7f796a1fa0e544cbfc1109d5eec87d8",
+      "sourceType": "github",
+      "skillPath": "skills/short-editing/SKILL.md",
+      "computedHash": "9223b6b01d44ea5531b60d6643de67445a9dec60105327d09af1747c30ac4e1c",
       "installMode": "copy"
     },
     "slideshow": {
