@@ -2,6 +2,12 @@
 
 An Electron + TypeScript app for macOS, used for clipping content.
 
+## App structure
+
+- The main process (`src/main`) owns the filesystem. The window only reaches it through the typed `window.api` from `src/preload`, and types used by both sides live in `src/shared/types.ts`.
+- The window reads imported files through `clip://media/<id>` only, never `file://`. An id must be one the workspace store knows, so add new file access there.
+- UI follows vfx Studio's layout with Clipfora's own brand: colors are the CSS variables in `src/renderer/src/assets/main.css`, primitives are in `src/renderer/src/components/ui`.
+
 ## Branch names
 
 Name every new branch `<type>/<short-kebab-description>`, e.g. `feat/clip-trimmer`. The type joins with `/` because git rejects `:` in branch names.
