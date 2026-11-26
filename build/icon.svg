@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- App icon. The mark is the same artwork as src/renderer/src/assets/logo.svg: change both together. -->
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#162036" />
+    <stop offset="1" stop-color="#0B1020" />
+  </linearGradient>
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bg)" />
+  <g transform="translate(232 232) scale(5.6)">
+  <defs>
+      <linearGradient id="ring" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0.12" stop-color="#3B82F6" />
+        <stop offset="0.52" stop-color="#00D4FF" />
+      </linearGradient>
+      <linearGradient id="play" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#38A9FF" />
+        <stop offset="1" stop-color="#12C6FF" />
+      </linearGradient>
+    </defs>
+    <path
+      fill="url(#ring)"
+      d="M92.5 32C84 24 70 12.5 60 9C52 6.200 44.500 6.300 38 13L13 39Q2.500 50 13 61L38 87C44.500 93.700 52 93.800 60 91C70 87.500 84 76 91.500 65.500C82 65.500 68 70 58 74.500C52 77.200 47.500 73.500 44 70L31 57Q24 50 31 43L44 30C47.500 26.500 52 22.800 58 25.500C68 30 82 32 92.500 32Z"
+    />
+    <path
+      fill="url(#play)"
+      stroke="url(#play)"
+      stroke-width="6"
+      stroke-linejoin="round"
+      d="M48.500 38.500V63.500L71.500 51Z"
+    />
+  </g>
+</svg>

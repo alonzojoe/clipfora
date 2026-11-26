@@ -11,8 +11,6 @@ files:
   - "!{.eslintcache,eslint.config.mjs,biome.json,dev-app-update.yml,CHANGELOG.md,README.md,CLAUDE.md,skills-lock.json}"
   - "!{.env,.env.*,.npmrc,pnpm-lock.yaml}"
   - "!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}"
-asarUnpack:
-  - resources/**
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
