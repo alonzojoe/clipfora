@@ -10,3 +10,11 @@
 
 # Local Claude Code settings
 .claude/settings.local.json
+
+# Build output and tooling
+node_modules
+dist
+out
+.DS_Store
+.eslintcache
+*.log*
