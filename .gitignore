@@ -1,0 +1,12 @@
+# Audio files
+*.mp3
+*.wav
+*.m4a
+*.aac
+*.flac
+*.ogg
+*.opus
+*.aiff
+
+# Local Claude Code settings
+.claude/settings.local.json
